@@ -1,6 +1,8 @@
 let body = document.body;
 let mainEl = document.createElement("main");
 
+let questionCounter = 0;
+
 let infoEl = document.createElement("div");
 let highScoreEl = document.createElement("a");
 let timerEl = document.createElement("p");
@@ -83,6 +85,8 @@ body.appendChild(infoEl);
 body.appendChild(mainEl);
 
 
+
+
 let createQuery = function(obj) {
     let queryEl = document.createElement("section");
     queryEl.className = "query";
@@ -93,7 +97,6 @@ let createQuery = function(obj) {
     queryEl.appendChild(question);
     queryEl.appendChild(choices);
 
-    console.log(queryEl)
     return queryEl;
 }
 
@@ -118,8 +121,35 @@ let createChoices = function(obj) {
     return choicesEl;
 }
 
-buttonEl.addEventListener("click", () => {
+
+
+let getAnswer = function(event) {
+    if (event.target.closest("li")) {
+        let userAnswer = event.target.innerText;
+        checkAnswer(userAnswer, quiz[questionCounter].a);
+    } 
+}
+
+let checkAnswer = function(userAnswer, answer) {
+    if (userAnswer === answer) {
+        console.log("True");
+    } else {
+        console.log("False");
+    }
+
+    questionCounter++;
+    mainFunction();
+}
+
+
+let mainFunction = function() {
     mainEl.innerHTML = "";
-    mainEl.appendChild( createQuery(quiz[0]) );
-})
+    if (questionCounter !== quiz.length) {
+        mainEl.appendChild( createQuery(quiz[questionCounter]) );  
+    }
+};
+
+
+buttonEl.addEventListener("click", mainFunction)
+mainEl.addEventListener("click", getAnswer); 
 
