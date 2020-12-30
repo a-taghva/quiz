@@ -59,9 +59,9 @@ body {
 .btn {
     background: var(--primary-color);
     color: white;
-    margin: 20px;
-    padding: 5px 15px;
-    font-size: 120%;
+    margin: 20px 5px;
+    padding: 5px 5px;
+    font-size: 110%;
     outline: none;
     border-radius: 7.5px;
     cursor: pointer;
@@ -124,4 +124,62 @@ ol li:active {
     background: var(--secondary-color);
 }
 
+.result {
+    max-width: 600px;
+    margin: 0 auto;
+}
 
+.result h2 {
+    margin-bottom: 15px;
+}
+
+.result > p {
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    height: 29px;
+    margin-right: 5px;
+    width: 185px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.container label {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.submit-btn {
+    margin: 0;
+}
+
+@media screen and (max-width: 380px) {
+    .container {
+        flex: 1 100%;
+        flex-basis: 100%;
+    }
+    .container label {
+        margin-bottom: 5px;
+    }
+    .input-field {
+        flex: 1 100%;
+    }
+    .input-field input {
+        flex-basis: 100%;
+        margin-bottom: 5px;
+    }
+    .input-field button {
+        flex-basis: 100%;
+    }
+}
