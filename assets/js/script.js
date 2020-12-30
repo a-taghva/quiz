@@ -212,15 +212,17 @@ let timer = function() {
     timeLeftEl.textContent--;
     checkTimeInterval();
 }
-
+let isOver = false;
 let checkTimeInterval = function() {
     timeLeft = timeLeftEl.textContent;
     if (timeLeft <= 0) {
         timeLeftEl.textContent = 0;
         clearInterval(timeInterval);
-        createResultSection(timeLeftEl.textContent);
+        isOver = true;
+        mainFunction();
         return true;
     };
+    return false;
 }
 
 let startTimer = function (stop) {
@@ -261,8 +263,7 @@ let answerChecker = function () {
 
 
 let mainFunction = function() {
-
-    if (questionCounter === quiz.length) {
+    if (questionCounter === quiz.length || isOver) {
         clearInterval(timeInterval);
         createResultSection(timeLeftEl.innerText);
         answerChecker();
