@@ -154,7 +154,6 @@ input[type="text"] {
 .container {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .container label {
@@ -165,15 +164,15 @@ input[type="text"] {
 .input-field {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
 }
 
 .submit-btn {
     margin: 0;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 386px) {
     .container {
+        flex-wrap: wrap;
         flex: 1 100%;
         flex-basis: 100%;
     }
@@ -181,6 +180,7 @@ input[type="text"] {
         margin-bottom: 5px;
     }
     .input-field {
+        flex-wrap: wrap;
         flex: 1 100%;
     }
     .input-field input {

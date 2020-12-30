@@ -111,6 +111,8 @@ let createIntroSection = function() {
 
 // create result section
 let createResultSection = function(score) {
+    mainEl.innerHTML = "";
+
     resultEl.className = "result";
 
     h2El.textContent = "All Done!";
@@ -151,6 +153,7 @@ let createResultSection = function(score) {
 
 // create query section
 let createQuery = function(obj) {
+    mainEl.innerHTML = "";
     let queryEl = document.createElement("section");
     queryEl.className = "query";
 
@@ -203,16 +206,28 @@ let showAnswer = function(x) {
 
 
 // ***** Timer ***** 
-let timer = function() {
-    timeLeftEl.innerText--;
-}
-
 let timeInterval;
 
+let timer = function() {
+    timeLeftEl.textContent--;
+    checkTimeInterval();
+}
+
+let checkTimeInterval = function() {
+    timeLeft = timeLeftEl.textContent;
+    if (timeLeft <= 0) {
+        timeLeftEl.textContent = 0;
+        clearInterval(timeInterval);
+        createResultSection(timeLeftEl.textContent);
+        return true;
+    };
+}
+
 let startTimer = function (stop) {
-    timeLeftEl.innerText = 75;
+    timeLeftEl.textContent = 75;
     timeInterval = setInterval(timer, 1000)
 }
+
 
 
 let getAnswer = function(event) {
@@ -228,6 +243,7 @@ let checkAnswer = function(userAnswer, answer) {
     } else {
         check = false;
         timeLeftEl.innerText -= 10;
+        if ( checkTimeInterval() ) return 0;
     }
 
     questionCounter++;
@@ -246,7 +262,6 @@ let answerChecker = function () {
 
 let mainFunction = function() {
 
-    mainEl.innerHTML = "";
     if (questionCounter === quiz.length) {
         clearInterval(timeInterval);
         createResultSection(timeLeftEl.innerText);
