@@ -26,7 +26,14 @@ let inputFieldEl = document.createElement("div");
 let inputEl = document.createElement("input");
 let submitEl = document.createElement("button");
 
+// * ANSWER ELEMENTS
+let answerEl = document.createElement("div");
+let pElement = document.createElement("p");
+
+//for checking answers
+let check;
 let questionCounter = 0;
+
 
 let quiz = [
     {
@@ -143,7 +150,7 @@ let createResultSection = function(score) {
     body.appendChild(mainEl);
 }
 
-
+// create query section
 let createQuery = function(obj) {
     let queryEl = document.createElement("section");
     queryEl.className = "query";
@@ -157,6 +164,7 @@ let createQuery = function(obj) {
     return queryEl;
 }
 
+// create questions
 let createQuestion = function(str) {
     let questionEl = document.createElement("h2");
     questionEl.className = "question";
@@ -165,6 +173,7 @@ let createQuestion = function(str) {
     return questionEl;
 }
 
+// create choices
 let createChoices = function(obj) {
     let choicesEl = document.createElement("ol");
     choicesEl.className = "choices";
@@ -176,6 +185,27 @@ let createChoices = function(obj) {
     }
 
     return choicesEl;
+}
+
+let createAnswer = function(x) {
+    answerEl.className = "query answer";
+    pElement.textContent = x;
+    answerEl.appendChild(pElement);
+}
+
+// show answer
+let showAnswer = function(x) {
+    createAnswer(x);
+    mainEl.appendChild(answerEl);
+    let counter = 0;
+    let showInterval = setInterval( ()=> {
+        counter++;
+
+        if (counter === 2) {
+            answerEl.remove();
+            clearInterval(showInterval);
+        }
+    }, 450);
 }
 
 
@@ -201,14 +231,22 @@ let getAnswer = function(event) {
 
 let checkAnswer = function(userAnswer, answer) {
     if (userAnswer === answer) {
-        console.log("True");
+        check = true;
     } else {
-        console.log("False");
+        check = false;
         timeLeftEl.innerText -= 10;
     }
 
     questionCounter++;
     mainFunction();
+}
+
+let answerChecker = function () {
+    if (check === true) {
+        showAnswer("Correct!");
+    } else if (check === false) {
+        showAnswer("Wrong!");
+    }
 }
 
 
@@ -219,8 +257,10 @@ let mainFunction = function() {
     if (questionCounter === quiz.length) {
         clearInterval(timeInterval);
         createResultSection(timeLeftEl.innerText);
+        answerChecker();
     } else {
         mainEl.appendChild( createQuery(quiz[questionCounter]) );
+        answerChecker();
     }
 };
 

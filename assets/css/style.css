@@ -124,6 +124,15 @@ ol li:active {
     background: var(--secondary-color);
 }
 
+.answer {
+    margin-top: 25px;
+    padding: 5px;
+    border-top: 1px solid gray;
+    font-size: 150%;
+    color: gray;
+    font-style: italic;
+}
+
 .result {
     max-width: 600px;
     margin: 0 auto;
