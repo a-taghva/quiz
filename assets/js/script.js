@@ -144,7 +144,6 @@ let createResultSection = function(score) {
 
 
     resultEl.appendChild(containerEl);
-    console.log(resultEl);
 
     mainEl.appendChild(resultEl);
     body.appendChild(mainEl);
@@ -197,15 +196,9 @@ let createAnswer = function(x) {
 let showAnswer = function(x) {
     createAnswer(x);
     mainEl.appendChild(answerEl);
-    let counter = 0;
-    let showInterval = setInterval( ()=> {
-        counter++;
-
-        if (counter === 2) {
-            answerEl.remove();
-            clearInterval(showInterval);
-        }
-    }, 450);
+    setTimeout( ()=> {
+        answerEl.remove();
+    }, 620);
 }
 
 
