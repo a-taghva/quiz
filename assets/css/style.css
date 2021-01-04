@@ -7,6 +7,7 @@
 :root {
     --primary-color: rgb(39, 14, 97);
     --secondary-color: rgb(173, 65, 225);
+    --tertiary-color: rgb(208, 199, 227);
 }
 
 body {
@@ -110,17 +111,42 @@ main {
     width: 225px;
 }
 
-ol li:before {
+.choices li:before {
     counter-increment: li-counter;
     content: counter(li-counter) ". ";
 }
 
-ol li:hover {
+.choices li:hover {
     cursor: pointer;
 }
 
-ol li:active {
+.choices li:active {
     background: var(--secondary-color);
+}
+
+.hs-board {
+    max-width: 350px;
+    margin: 50px auto;
+}
+
+.highscore {
+    counter-reset: hs-counter;
+    list-style: none;
+    margin-top: 10px;
+    max-width: 400px;
+}
+
+.highscore li {
+    margin: 2.5px 0;
+}
+
+.highscore li::before {
+    counter-increment: hs-counter;
+    content: counter(hs-counter) ". ";
+}
+
+.highscore li:nth-child(odd) {
+    background: var(--tertiary-color);
 }
 
 .answer {
@@ -168,6 +194,14 @@ input[type="text"] {
 
 .submit-btn {
     margin: 0;
+}
+
+.go-back, .clear {
+    margin: 10px 2.5px 0 0;
+    padding: 2.5px;
+    font-weight: lighter;
+    font-size: 80%;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 386px) {

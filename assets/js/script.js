@@ -20,7 +20,7 @@ let resultEl = document.createElement("section");
 let h2El = document.createElement("h2");
 let pEl = document.createElement("p");
 let scoreEl = document.createElement("span");
-let containerEl = document.createElement("div");
+let formEl = document.createElement("form");
 let labelEl = document.createElement("label");
 let inputFieldEl = document.createElement("div");
 let inputEl = document.createElement("input");
@@ -30,10 +30,21 @@ let submitEl = document.createElement("button");
 let answerEl = document.createElement("div");
 let pElement = document.createElement("p");
 
+// * HIGHSCORE ELEMENTS
+let boardEl = document.createElement("section");
+let h2Elmnt = document.createElement("h2");
+let highScoreListEl = document.createElement("ol");
+let buttonsEl = document.createElement("div");
+let goBackBtn = document.createElement("button");
+let clearBtn = document.createElement("button");
+
 //for checking answers
 let check;
 let questionCounter = 0;
 
+let isOnMainPage = false;
+let isOnInitials = false;
+let clickHighScore = false;
 
 let quiz = [
     {
@@ -63,12 +74,15 @@ let quiz = [
     }
 ];
 
+let initials = [];
+let savedInitials = [];
+
 
 // create info div which contains highScore and timer
 let createInfoSection = function() {
     infoEl.className = "info";
 
-    highScoreEl.setAttribute("href", "#");
+    highScoreEl.setAttribute("id", "high-score");
     highScoreEl.textContent = "View High Score";
 
     timerEl.className = "timer";
@@ -109,6 +123,8 @@ let createIntroSection = function() {
     body.appendChild(mainEl);
 }
 
+
+
 // create result section
 let createResultSection = function(score) {
     mainEl.innerHTML = "";
@@ -125,12 +141,11 @@ let createResultSection = function(score) {
     resultEl.appendChild(pEl);
 
     // create container div
-    containerEl.className = "container";
+    formEl.className = "container";
 
     labelEl.setAttribute("for", "name");
-    labelEl.textContent = "Enter initials: ";
 
-    containerEl.appendChild(labelEl);
+    formEl.appendChild(labelEl);
 
     inputFieldEl.className = "input-field";
     inputEl.setAttribute("type", "text");
@@ -142,10 +157,10 @@ let createResultSection = function(score) {
     inputFieldEl.appendChild(inputEl);
     inputFieldEl.appendChild(submitEl);
 
-    containerEl.appendChild(inputFieldEl);
+    formEl.appendChild(inputFieldEl);
 
 
-    resultEl.appendChild(containerEl);
+    resultEl.appendChild(formEl);
 
     mainEl.appendChild(resultEl);
     body.appendChild(mainEl);
@@ -215,7 +230,7 @@ let timer = function() {
 let isOver = false;
 let checkTimeInterval = function() {
     timeLeft = timeLeftEl.textContent;
-    if (timeLeft <= 0) {
+    if (timeLeft <= 0 || isOver === true) {
         timeLeftEl.textContent = 0;
         clearInterval(timeInterval);
         isOver = true;
@@ -233,7 +248,7 @@ let startTimer = function (stop) {
 
 
 let getAnswer = function(event) {
-    if (event.target.closest("li")) {
+    if (event.target.closest("ol.choices li")) {
         let userAnswer = event.target.innerText;
         checkAnswer(userAnswer, quiz[questionCounter].a);
     } 
@@ -255,15 +270,131 @@ let checkAnswer = function(userAnswer, answer) {
 let answerChecker = function () {
     if (check === true) {
         showAnswer("Correct!");
+        check = "";
     } else if (check === false) {
         showAnswer("Wrong!");
+        check = "";
     }
+}
+let rankEl;
+let createHighScoreBoard = function() {
+
+    mainEl.innerHTML = "";
+    infoEl.innerHTML = "";
+
+    boardEl.className = "section";
+    h2Elmnt.textContent = "High Scores";
+
+    boardEl.appendChild(h2Elmnt);
+
+    highScoreListEl.className = "highscore";
+    
+    // if (!isEmpty(initials)) {
+    //     initials = JSON.parse(initials);
+    // }
+
+    for (let i = 0; i < initials.length; i++) {
+        let listItem = document.createElement("li");
+        listItem.className = "rank";
+        listItem.textContent = initials[i].initial + " - " + initials[i].score;
+        highScoreListEl.appendChild(listItem);
+    }
+    rankEl = document.getElementsByClassName("rank");
+    boardEl.appendChild(highScoreListEl);
+
+    buttonsEl.className = "buttons";
+    goBackBtn.className = "btn go-back";
+    clearBtn.className = "btn clear";
+    goBackBtn.textContent = "Go Back";
+    clearBtn.textContent ="Clear High Scores";
+
+    buttonsEl.appendChild(goBackBtn);
+    buttonsEl.appendChild(clearBtn);
+
+    boardEl.appendChild(buttonsEl);
+
+    mainEl.appendChild(boardEl);
+};
+
+let clearHighScoreBoard = function() {
+    if (rankEl.length != 0) {
+        for (let i = 0; i <= rankEl.length; ) {
+            rankEl[i].remove();
+            if (i == rankEl.length) break;
+        };
+    }
+}
+
+function isEmpty(arr) {
+    for (key in arr) {
+      return false;
+    };
+    return true;
+};
+
+let getInitialValue = function() {
+    let inputValue = inputEl.value;
+    return inputValue;
+}
+
+let getScoreValue = function() {
+    let scoreValue = timeLeftEl.textContent;
+    return scoreValue;
+}
+
+
+let saveInitialValues = function() {
+    let initialValue = getInitialValue();
+    let scoreValue = getScoreValue();
+    let initialDataObj = {
+        initial: initialValue,
+        score: scoreValue,
+    };
+    sortInitials(initialDataObj);
+    initials = JSON.stringify(initials);
+    localStorage.setItem("initials", initials);
+    initials = JSON.parse(initials);
+}
+
+let loadInitialValues = function() {
+    savedInitials = localStorage.getItem("initials");
+    if (!savedInitials) {
+        savedInitials = [];
+        return false;
+    }
+    savedInitials = JSON.parse(savedInitials);
+    initials = savedInitials;
+}
+
+let sortInitials = function(obj) {
+    let isAdded = false;
+    for (let i = 0; i < initials.length; i++) {
+        if (+obj.score > +initials[i].score) {
+            initials.splice(i, 0, obj);
+            isAdded = true;
+            break;
+        };
+    };
+    isAdded || initials.push(obj);
 }
 
 
 
+let showBoard = function() {
+    isOnInitials = false;
+    isOver = true;
+    if (clickHighScore) {
+        createHighScoreBoard();
+    } else {
+        saveInitialValues();
+        createHighScoreBoard();
+    }
+}
+
 let mainFunction = function() {
+    isOnMainPage = false;
     if (questionCounter === quiz.length || isOver) {
+        isOnInitials = true;
         clearInterval(timeInterval);
         createResultSection(timeLeftEl.innerText);
         answerChecker();
@@ -274,10 +405,43 @@ let mainFunction = function() {
 };
 
 
-createInfoSection();
-createIntroSection();
+let createMainPage = function () {
+    isOver = false;
+    isOnMainPage = true;
+    questionCounter = 0;
+    mainEl.innerHTML = "";
+    createInfoSection();
+    createIntroSection();
+};
+
+
+createMainPage();
+let showHighScore = document.getElementById("high-score");
+let clearScores = document.getElementsByClassName("clear");
+loadInitialValues();
 
 buttonEl.addEventListener("click", mainFunction);
 buttonEl.addEventListener("click", startTimer);
 mainEl.addEventListener("click", getAnswer); 
-
+formEl.addEventListener("submit", showBoard);
+goBackBtn.addEventListener("click", () => {
+    clearHighScoreBoard();
+    createMainPage();
+});
+showHighScore.addEventListener("click", () => {
+    if (isOnMainPage) {
+        clickHighScore = true;
+        showBoard();
+        clickHighScore = false;
+    } else if (isOnInitials) {
+        alert("First Enter the initials!");
+    } else {
+        alert("You have to finish the Quiz!")
+    }
+});
+clearBtn.addEventListener("click", () => {
+    localStorage.clear();
+    initials = [];
+    clearHighScoreBoard();
+    createHighScoreBoard();
+})
