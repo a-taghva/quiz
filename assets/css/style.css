@@ -67,7 +67,7 @@ body {
     cursor: pointer;
 }
 
-.btn:active {
+.btn:active, .btn:focus {
     background: var(--secondary-color);
 }
 
@@ -120,7 +120,7 @@ main {
     cursor: pointer;
 }
 
-.choices li:active {
+.choices li:active, .choices li:focus{
     background: var(--secondary-color);
 }
 
