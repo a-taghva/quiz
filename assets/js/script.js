@@ -194,6 +194,7 @@ let createQuestion = function(str) {
 let createChoices = function(obj) {
     let choicesEl = document.createElement("ol");
     choicesEl.className = "choices";
+    questionCounter === 2 && (choicesEl.className = "choices large");
 
     for (let i = 0; i < obj.length; i++) {
         let optionEl = document.createElement("li");

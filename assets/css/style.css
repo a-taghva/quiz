@@ -204,7 +204,22 @@ input[type="text"] {
     border-radius: 5px;
 }
 
-@media screen and (max-width: 386px) {
+@media screen and (max-width: 595px) {
+    .intro h1 {
+        font-size: 200%;
+    }
+    .description {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 395px) {
+    .intro h1 {
+        font-size: 150%;
+    }
+    .description {
+        font-size: 1em;
+    }
     .container {
         flex-wrap: wrap;
         flex: 1 100%;
