@@ -30,6 +30,7 @@ body {
 }
 
 .info a:hover {
+    cursor: pointer;
     text-decoration: underline;
 }
 
